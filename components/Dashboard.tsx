@@ -1,11 +1,13 @@
 "use client"
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import DisplayBox from './DisplayBox';
 
 const Dashboard = () => {
     const [paymentReport, setPaymentReport] = useState<any[]>([]);
     const [mtrReport, setMtrReport] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         getData()
     }, [])
@@ -20,6 +22,16 @@ const Dashboard = () => {
                 return mtr;
             });
         return filteredMtrData;
+    };
+
+    const mergeDataByOrderId = (mtrData: any[], paymentData: any[]) => {
+        return mtrData.map((mtr) => {
+            const matchingPayment = paymentData.find(pay => pay.orderId === mtr.orderId);
+            if (matchingPayment) {
+                return { ...mtr, ...matchingPayment };
+            }
+            return mtr; // Return mtr as is if no matching payment data is found
+        });
     };
 
     const transformPaymentData = (paymentData: any[]) => {
@@ -51,6 +63,10 @@ const Dashboard = () => {
             const filteredPaymentData = transformPaymentData(paymentData);
             console.log('filteredMtrData', filteredMtrData.length);
             console.log('filteredPaymentData', filteredPaymentData.length);
+            const mergedData = mergeDataByOrderId(filteredMtrData, filteredPaymentData);
+            console.log('mergedData', mergedData[0]);
+            console.log('mergedData', mergedData[3]);
+            console.log('mergedData', mergedData[500]);
 
             setMtrReport(filteredMtrData);
             setPaymentReport(filteredPaymentData);
@@ -95,8 +111,28 @@ const Dashboard = () => {
                         </div>
                     </form>
                 </div>
-                <div>
-
+                <div className='flex flex-wrap py-2'>
+                    <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
+                        <DisplayBox text={"Previous Month order"} amount={3458} />
+                    </div>
+                    <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
+                        <DisplayBox text={"Previous Month order"} amount={40} />
+                    </div>
+                    <div className='w-full lg:w-1/3'>
+                        <DisplayBox text={"Previous Month order"} amount={40} />
+                    </div>
+                </div>
+                
+                <div className='flex flex-wrap py-2'>
+                    <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
+                        <DisplayBox text={"Previous Month order"} amount={3458} />
+                    </div>
+                    <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
+                        <DisplayBox text={"Previous Month order"} amount={40} />
+                    </div>
+                    <div className='w-full lg:w-1/3'>
+                        <DisplayBox text={"Previous Month order"} amount={40} />
+                    </div>
                 </div>
             </div>
         </>
