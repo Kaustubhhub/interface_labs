@@ -1,0 +1,21 @@
+-- DropForeignKey
+ALTER TABLE "Payment" DROP CONSTRAINT "Payment_orderId_fkey";
+
+-- AlterTable
+ALTER TABLE "Mtr" ALTER COLUMN "invoiceDate" DROP NOT NULL,
+ALTER COLUMN "transactionType" DROP NOT NULL,
+ALTER COLUMN "shipmentDate" DROP NOT NULL,
+ALTER COLUMN "orderDate" DROP NOT NULL,
+ALTER COLUMN "shipmentItemId" DROP NOT NULL,
+ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "invoiceAmount" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Payment" ALTER COLUMN "date" DROP NOT NULL,
+ALTER COLUMN "type" DROP NOT NULL,
+ALTER COLUMN "orderId" DROP NOT NULL,
+ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "total" DROP NOT NULL;
+
+-- AddForeignKey
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Mtr"("id") ON DELETE SET NULL ON UPDATE CASCADE;

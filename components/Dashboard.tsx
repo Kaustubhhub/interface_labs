@@ -1,6 +1,30 @@
-import React from 'react'
+"use client"
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 const Dashboard = () => {
+    const [paymentReport, setPaymentReport] = useState<any[]>([]);
+    const [mtrReport, setMtrReport] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        getData()
+    }, [])
+
+    const getData = async () => {
+        setLoading(true);
+        const response = await axios.get('/api/getData');
+        const { mtrData, paymentData } = response.data;
+        setMtrReport(mtrData)
+        setPaymentReport(paymentData)
+        setLoading(false);
+    }
+
+    if (loading) {
+        return <div className='flex justify-center items-center w-full h-screen'>
+            fetching data
+        </div>
+    }
+
     return (
         <>
             <div className='bg-[#fafafa] text-[#724DFF] flex justify-center items-center p-4 border'>

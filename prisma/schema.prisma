@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,9 +8,26 @@ datasource db {
 }
 
 model Payment {
-  id Int @unique @default(autoincrement())
+  id          String   @unique @default(uuid())
+  date        String?  // Changed to String
+  type        String?  // Changed to String
+  orderId     String?  // No foreign key relationship
+  description String?  // Changed to String
+  total       String?  // Changed to String
+
+  // Index for faster lookups (optional, if you need to query by orderId)
+  @@index([orderId])
 }
 
 model Mtr {
-  id Int @unique @default(autoincrement())
+  id              String   @unique @default(uuid())
+  invoiceDate     String?  // Changed to String
+  transactionType String?  // Changed to String
+  shipmentDate    String?  // Changed to String
+  orderDate       String?  // Changed to String
+  shipmentItemId  String?  // Changed to String
+  description     String?  // Changed to String
+  invoiceAmount   String?  // Changed to String
+
+  // Back-reference to Payment model removed as there is no foreign key relationship
 }
