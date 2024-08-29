@@ -2,6 +2,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import DisplayBox from './DisplayBox';
+import BasicBars from './Barcharts';
+import BasicPie from './Piecharts';
 
 const Dashboard = () => {
     const [paymentReport, setPaymentReport] = useState<any[]>([]);
@@ -57,16 +59,9 @@ const Dashboard = () => {
             setLoading(true);
             const response = await axios.get('/api/getData');
             const { mtrData, paymentData } = response.data;
-            console.log('mtrData', mtrData.length);
-            console.log('paymentData', paymentData.length);
             const filteredMtrData = transformMtrData(mtrData);
             const filteredPaymentData = transformPaymentData(paymentData);
-            console.log('filteredMtrData', filteredMtrData.length);
-            console.log('filteredPaymentData', filteredPaymentData.length);
             const mergedData = mergeDataByOrderId(filteredMtrData, filteredPaymentData);
-            console.log('mergedData', mergedData[0]);
-            console.log('mergedData', mergedData[3]);
-            console.log('mergedData', mergedData[500]);
 
             setMtrReport(filteredMtrData);
             setPaymentReport(filteredPaymentData);
@@ -132,6 +127,21 @@ const Dashboard = () => {
                     </div>
                     <div className='w-full lg:w-1/3'>
                         <DisplayBox text={"Negative Payout"} nextPath='/order-payment/previous-month-order' amount={40} />
+                    </div>
+                </div>
+                <div className='flex justify-around'>
+                    <div className='border w-1/2 pr-1 flex flex-col justify-center items-center rounded-lg'>
+                        <div className='flex flex-col justify-center items-center pt-5 font-bold'>
+                            Reimbursements by Dispute Type - last 30 days
+                        </div>
+                        <BasicBars />
+                    </div>
+                    <div className='border w-1/2 ml-3 flex flex-col justify-center items-center rounded-lg'>
+                        <div className='flex flex-col justify-center items-center pt-5 font-bold'>
+                            % Reimbursements by Dispute Type - this year
+                        </div>
+                        <BasicPie />
+
                     </div>
                 </div>
             </div>

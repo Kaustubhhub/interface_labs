@@ -17,7 +17,7 @@ const DisplayBox = ({ text, amount, nextPath }: DisplayBoxProps) => {
     }
 
     return (
-        <div className='flex justify-between p-4 items-center border '>
+        <div className='flex justify-between p-4 items-center border rounded-lg'>
             <div className=''>
                 <div className='font-bold p-3'>
                     {text}
