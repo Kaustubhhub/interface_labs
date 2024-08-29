@@ -1,17 +1,19 @@
 "use client"
 
+import { useRouter } from 'next/navigation';
 import React from 'react'
 import { MdOutlineNavigateNext } from "react-icons/md";
 
 interface DisplayBoxProps {
     text: string,
-    amount: number
+    amount: number,
+    nextPath: string
 }
 
-const DisplayBox = ({ text, amount }: DisplayBoxProps) => {
-
+const DisplayBox = ({ text, amount, nextPath }: DisplayBoxProps) => {
+    const router = useRouter();
     const handleClick = () => {
-        alert(amount)
+        router.push(nextPath)
     }
 
     return (

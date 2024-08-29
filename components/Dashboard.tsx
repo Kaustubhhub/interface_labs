@@ -113,25 +113,25 @@ const Dashboard = () => {
                 </div>
                 <div className='flex flex-wrap py-2'>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Previous Month order"} amount={3458} />
+                        <DisplayBox text={"Previous Month Order"} nextPath='/order-payment/previous-month-order' amount={3458} />
                     </div>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Previous Month order"} amount={40} />
+                        <DisplayBox text={"Orders & Payments Recieved"} nextPath='/order-payment/previous-month-order' amount={40} />
                     </div>
                     <div className='w-full lg:w-1/3'>
-                        <DisplayBox text={"Previous Month order"} amount={40} />
+                        <DisplayBox text={"payment Pending"} nextPath='/order-payment/previous-month-order' amount={40} />
                     </div>
                 </div>
-                
+
                 <div className='flex flex-wrap py-2'>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Previous Month order"} amount={3458} />
+                        <DisplayBox text={"Tolerance rate breached"} nextPath='/order-payment/previous-month-order' amount={3458} />
                     </div>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Previous Month order"} amount={40} />
+                        <DisplayBox text={"Return"} nextPath='/order-payment/previous-month-order' amount={40} />
                     </div>
                     <div className='w-full lg:w-1/3'>
-                        <DisplayBox text={"Previous Month order"} amount={40} />
+                        <DisplayBox text={"Negative Payout"} nextPath='/order-payment/previous-month-order' amount={40} />
                     </div>
                 </div>
             </div>
