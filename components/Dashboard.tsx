@@ -28,13 +28,14 @@ const Dashboard = () => {
 
     const mergeDataByOrderId = (mtrData: any[], paymentData: any[]) => {
         return mtrData.map((mtr) => {
-            const matchingPayment = paymentData.find(pay => pay.orderId === mtr.orderId);
+            const matchingPayment = paymentData.find(pay => pay.orderId === mtr.id);
             if (matchingPayment) {
                 return { ...mtr, ...matchingPayment };
             }
             return mtr; // Return mtr as is if no matching payment data is found
         });
     };
+
 
     const transformPaymentData = (paymentData: any[]) => {
         const filteredPaymentData = paymentData
@@ -61,8 +62,15 @@ const Dashboard = () => {
             const { mtrData, paymentData } = response.data;
             const filteredMtrData = transformMtrData(mtrData);
             const filteredPaymentData = transformPaymentData(paymentData);
-            const mergedData = mergeDataByOrderId(filteredMtrData, filteredPaymentData);
+            console.log('filteredMtrData', filteredMtrData);
+            console.log('filteredPaymentData', filteredPaymentData);
+            let mergedData = mergeDataByOrderId(filteredMtrData, filteredPaymentData);
+            mergedData = mergedData.map(x => ({
+                ...x,
+                id: x.orderId ?? ''
+            }));
 
+            console.log('mergedData', mergedData);
             setMtrReport(filteredMtrData);
             setPaymentReport(filteredPaymentData);
             setLoading(false);
@@ -129,21 +137,21 @@ const Dashboard = () => {
                         <DisplayBox text={"Negative Payout"} nextPath='/order-payment/previous-month-order' amount={40} />
                     </div>
                 </div>
-                <div className='flex justify-around'>
-                    <div className='border w-1/2 pr-1 flex flex-col justify-center items-center rounded-lg'>
+                <div className='flex flex-col md:flex-row justify-around'>
+                    <div className='border w-full md:w-1/2 pr-1 flex flex-col justify-center items-center rounded-lg'>
                         <div className='flex flex-col justify-center items-center pt-5 font-bold'>
                             Reimbursements by Dispute Type - last 30 days
                         </div>
                         <BasicBars />
                     </div>
-                    <div className='border w-1/2 ml-3 flex flex-col justify-center items-center rounded-lg'>
+                    <div className='border w-full md:w-1/2 md:ml-3 mt-4 md:mt-0 flex flex-col justify-center items-center rounded-lg'>
                         <div className='flex flex-col justify-center items-center pt-5 font-bold'>
                             % Reimbursements by Dispute Type - this year
                         </div>
                         <BasicPie />
-
                     </div>
                 </div>
+
             </div>
         </>
     )
