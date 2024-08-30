@@ -1,7 +1,7 @@
 import Dashboard from '@/components/Dashboard'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
     return (
         <div className='absolute top-0 w-11/12 left-20'>
             <Dashboard/>
@@ -9,4 +9,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
