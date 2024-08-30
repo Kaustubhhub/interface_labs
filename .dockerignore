@@ -1,0 +1,30 @@
+# Node modules directory
+node_modules
+
+# Build output
+.next
+
+# Log files
+*.log
+
+# Dependency directories
+*.npm
+*.yarn
+
+# IDE and editor directories
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Prisma
+prisma/migrations
