@@ -110,7 +110,7 @@ const Dashboard = () => {
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                             </div>
-                            <input type="search" id="default-search" className="block w-full p-4 ps-10 text-sm border rounded-lg" placeholder="Search Mockups, Logos..." required />
+                            <input type="search" id="default-search" className="block w-full p-4 ps-10 text-sm border rounded-lg" placeholder="Search" required />
                         </div>
                     </form>
                 </div>

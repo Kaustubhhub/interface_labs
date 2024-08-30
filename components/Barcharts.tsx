@@ -5,7 +5,7 @@ export default function BasicBars() {
     return (
         <div>
             <BarChart
-                xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
+                xAxis={[{ scaleType: 'band', data: ['group A', 'FBA inbound Pickup Service', 'FBA inventory Storage Fee'] }]}
                 series={[{ data: [4, 3, 5] }]}
                 width={500}
                 height={300}
