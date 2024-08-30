@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { LuHistory } from "react-icons/lu";
@@ -15,6 +15,8 @@ import { IoMdShare } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { useRouter } from 'next/navigation';
 
+import { usePathname } from 'next/navigation'
+
 
 const SIDEBAR_ICONS = [
     {
@@ -25,47 +27,47 @@ const SIDEBAR_ICONS = [
     }, {
         img: <IoChatbubblesOutline />
         ,
-        path: "/dashboard"
+        path: "/chat"
 
     }, {
         img: <IoBookOutline />
         ,
-        path: "/dashboard"
+        path: "/book"
 
     }, {
         img: <RiFolder6Line />
 
         ,
-        path: "/dashboard"
+        path: "/folder"
 
     }, {
         img: <IoFileTrayStackedOutline />
         ,
-        path: "/dashboard"
+        path: "/stack"
 
     }, {
         img: <LuHistory />
         ,
-        path: "/dashboard"
+        path: "/history"
 
     }, {
         img: <TbTopologyBus />
         ,
-        path: "/dashboard"
+        path: "/topology"
 
     }, {
         img: <IoFingerPrint />,
-        path: "/dashboard"
+        path: "/security"
 
     }, {
         img: <IoFingerPrint />
         ,
-        path: "/dashboard"
+        path: "/job"
 
     }, {
         img: <CiDumbbell />
         ,
-        path: "/dashboard"
+        path: "/gym"
 
     },
 ]
@@ -92,11 +94,13 @@ const LOWER_SIDEBAR_ICONS = [
 const Sidebar = () => {
 
     const router = useRouter()
+    const pathname = usePathname()
     return (
         <div className='relative border flex flex-col justify-between items-center h-screen w-20 bg-[#FAFAFA]'>
+            {/* <span className='p-2'>{pathname}</span> */}
             <div className='py-10'>
                 {SIDEBAR_ICONS.map((x, i) => {
-                    return <div onClick={() => (router.push(`${x.path}`))} key={i} className='p-3 text-xl cursor-pointer'>
+                    return <div onClick={() => (router.push(`${x.path}`))} key={i} className={pathname === x.path ? "bg-[#724DFF] rounded-lg p-3 text-xl cursor-pointer" : 'p-3 text-xl cursor-pointer'}>
                         {x.img}
                     </div>
                 })}

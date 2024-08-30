@@ -19,6 +19,12 @@ const TableComponent = ({ headers, data }: TableProps) => {
         });
     };
 
+    if (!Array.isArray(data) || data.length === 0) {
+        return <div className='flex justify-center items-center'>
+            <span className='text-2xl font-bold'>No data to show</span>
+        </div>
+    }
+
     return (
         <div className=''>
             <table className="table-auto w-full">

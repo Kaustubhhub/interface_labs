@@ -8,11 +8,103 @@ import BasicPie from './Piecharts';
 const Dashboard = () => {
     const [paymentReport, setPaymentReport] = useState<any[]>([]);
     const [mtrReport, setMtrReport] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [lastMonthOrder, setLastMonthOrder] = useState(0);
+    const [paymentRecieved, setPaymentRecieved] = useState(0);
+    const [paymentPending, setPaymentPending] = useState(0);
+    const [returnOrder, setReturnOrder] = useState(0);
+    const [negativePayout, setNegavtivePayout] = useState(0);
+    const [lastMonthOrderArray, setLastMonthOrderArray] = useState<any[]>([]);
+    const [paymentRecievedArray, setPaymentRecievedArray] = useState<any[]>([]);
+    const [paymentPendingArray, setPaymentPendingArray] = useState<any[]>([]);
+    const [returnOrderArray, setReturnOrderArray] = useState<any[]>([]);
+    const [negativePayoutArray, setNegavtivePayoutArray] = useState<any[]>([]);
+
 
     useEffect(() => {
         getData()
     }, [])
+
+    const countLastMonthOrder = (data: any) => {
+        const currentDate = new Date();
+
+        // Get the last month's year and month
+        const lastMonth = currentDate.getMonth() === 0 ? 11 : currentDate.getMonth() - 1;
+        const lastMonthYear = lastMonth === 11 ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+
+        // Filter the data to find orders from the last month
+        const lastMonthOrders = data.filter((order: any) => {
+            const orderDate = new Date(order.orderDate);
+            return orderDate.getMonth() === lastMonth && orderDate.getFullYear() === lastMonthYear;
+        });
+
+        // Return the count of last month's orders
+        setLastMonthOrderArray(lastMonthOrders)
+        setLastMonthOrder(lastMonthOrders.length);
+    }
+
+    const countPaymentRecieved = (data: any) => {
+        let finalCount = 0;
+        let arr: any = [];
+        data.forEach((item: any) => {
+            if (item.category !== '') {
+                if (item.category === 'Order & Payment Received') {
+                    finalCount++;
+                    arr.push(item)
+                }
+            }
+        })
+        console.log('arr', arr);
+        setPaymentRecieved(arr)
+        setPaymentRecieved(finalCount)
+    }
+
+    const countPaymentPending = (data: any) => {
+        let finalCount = 0;
+        let arr: any = [];
+        data.forEach((item: any) => {
+            if (item.category !== '') {
+                if (item.category === 'Payment Pending') {
+                    arr.push(item);
+                    finalCount++;
+                }
+            }
+        })
+        setPaymentPendingArray(arr)
+        setPaymentPending(finalCount)
+    }
+
+    const countReturnOrder = (data: any) => {
+        let finalCount = 0;
+        let arr: any = [];
+        data.forEach((item: any) => {
+            if (item.category !== '') {
+                if (item.category === 'Return') {
+                    arr.push(item);
+                    finalCount++;
+                }
+            }
+        })
+        setReturnOrderArray(arr)
+        setReturnOrder(finalCount)
+    }
+
+    const countNegativePayout = (data: any) => {
+        let finalCount = 0;
+        let arr: any = [];
+        data.forEach((item: any) => {
+            if (item.category !== '') {
+                if (item.category === 'Negative Payout') {
+                    arr.push(item);
+                    finalCount++;
+                }
+            }
+        })
+        setNegavtivePayoutArray(arr)
+        setNegavtivePayout(finalCount)
+    }
+
+
 
     const transformMtrData = (mtrData: any[]) => {
         const filteredMtrData = mtrData
@@ -62,17 +154,41 @@ const Dashboard = () => {
             const { mtrData, paymentData } = response.data;
             const filteredMtrData = transformMtrData(mtrData);
             const filteredPaymentData = transformPaymentData(paymentData);
-            console.log('filteredMtrData', filteredMtrData);
-            console.log('filteredPaymentData', filteredPaymentData);
             let mergedData = mergeDataByOrderId(filteredMtrData, filteredPaymentData);
             mergedData = mergedData.map(x => ({
                 ...x,
-                id: x.orderId ?? ''
+                id: x.orderId ?? x.id
             }));
+            mergedData.forEach(item => {
+                let category = '';
 
+                if (item.orderId && item.orderId.length === 10) {
+                    category = 'Removal Order IDs';
+                }
+                else if (item.transactionType === 'Return' && item.invoiceAmount) {
+                    category = 'Return';
+                }
+                else if (item.transactionType === 'Payment' && item.total < 0) {
+                    category = 'Negative Payout';
+                }
+                else if (item.orderId && item.total && item.invoiceAmount) {
+                    category = 'Order & Payment Received';
+                }
+                else if (item.orderId && item.total && !item.invoiceAmount) {
+                    category = 'Order Not Applicable but Payment Received';
+                }
+                else if (item.orderId && item.invoiceAmount && !item.total) {
+                    category = 'Payment Pending';
+                }
+
+                item.category = category; // Assign the category to the item
+            });
             console.log('mergedData', mergedData);
-            setMtrReport(filteredMtrData);
-            setPaymentReport(filteredPaymentData);
+            countLastMonthOrder(mergedData)
+            countPaymentRecieved(mergedData)
+            countPaymentPending(mergedData)
+            countReturnOrder(mergedData)
+            countNegativePayout(mergedData)
             setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -116,25 +232,25 @@ const Dashboard = () => {
                 </div>
                 <div className='flex flex-wrap py-2'>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Previous Month Order"} nextPath='/order-payment/previous-month-order' amount={3458} />
+                        <DisplayBox text={"Previous Month Order"} nextPath='/order-payment/previous-month-order' amount={lastMonthOrder} />
                     </div>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Orders & Payments Recieved"} nextPath='/order-payment/previous-month-order' amount={40} />
+                        <DisplayBox text={"Orders & Payments Recieved"} nextPath='/order-payment/payment-order-recieved' amount={paymentRecieved} />
                     </div>
                     <div className='w-full lg:w-1/3'>
-                        <DisplayBox text={"payment Pending"} nextPath='/order-payment/previous-month-order' amount={40} />
+                        <DisplayBox text={"payment Pending"} nextPath='/order-payment/payment-pending' amount={paymentPending} />
                     </div>
                 </div>
 
                 <div className='flex flex-wrap py-2'>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Tolerance rate breached"} nextPath='/order-payment/previous-month-order' amount={3458} />
+                        <DisplayBox text={"Tolerance rate breached"} nextPath='/order-payment/tolerance-rate-breached' amount={lastMonthOrder} />
                     </div>
                     <div className='w-full md:w-1/2 lg:w-1/3 pr-2'>
-                        <DisplayBox text={"Return"} nextPath='/order-payment/previous-month-order' amount={40} />
+                        <DisplayBox text={"Return"} nextPath='/order-payment/return' amount={returnOrder} />
                     </div>
                     <div className='w-full lg:w-1/3'>
-                        <DisplayBox text={"Negative Payout"} nextPath='/order-payment/previous-month-order' amount={40} />
+                        <DisplayBox text={"Negative Payout"} nextPath='/order-payment/negative-payout' amount={negativePayout} />
                     </div>
                 </div>
                 <div className='flex flex-col md:flex-row justify-around'>
