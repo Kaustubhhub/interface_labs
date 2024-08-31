@@ -14,6 +14,8 @@ import { CgProfile } from "react-icons/cg";
 import { IoMdShare } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { useRouter } from 'next/navigation';
+import { CiBoxes } from "react-icons/ci";
+
 
 import { usePathname } from 'next/navigation'
 
@@ -60,7 +62,7 @@ const SIDEBAR_ICONS = [
         path: "/security"
 
     }, {
-        img: <IoFingerPrint />
+        img: <CiBoxes />
         ,
         path: "/job"
 
@@ -100,7 +102,7 @@ const Sidebar = () => {
             {/* <span className='p-2'>{pathname}</span> */}
             <div className='py-10'>
                 {SIDEBAR_ICONS.map((x, i) => {
-                    return <div onClick={() => (router.push(`${x.path}`))} key={i} className={pathname === x.path ? "bg-[#724DFF] rounded-lg p-3 text-xl cursor-pointer" : 'p-3 text-xl cursor-pointer'}>
+                    return <div onClick={() => (router.push(`${x.path}`))} key={i} className={pathname === x.path ? "bg-[#724DFF] text-white rounded-lg p-3 text-xl cursor-pointer" : 'p-3 text-xl cursor-pointer'}>
                         {x.img}
                     </div>
                 })}
