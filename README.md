@@ -53,6 +53,7 @@ After setting up your database, create a `.env` file in the root of your project
       yarn dev
 ```
 #### Database schema:
+```bash
 model Payment {
   id          String   @unique @default(uuid())
   date        String?  
