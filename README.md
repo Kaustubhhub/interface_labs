@@ -51,4 +51,27 @@ After setting up your database, create a `.env` file in the root of your project
       npm run dev
       # or
       yarn dev
+```
+#### Database schema:
+model Payment {
+  id          String   @unique @default(uuid())
+  date        String?  
+  type        String?  
+  orderId     String?  
+  description String?  
+  total       String? 
 
+  // Index for faster lookups (optional, if you need to query by orderId)
+  @@index([orderId])
+}
+
+model Mtr {
+  id              String   @unique @default(uuid())
+  invoiceDate     String?  
+  transactionType String?  
+  shipmentDate    String?  
+  orderDate       String? 
+  shipmentItemId  String?  
+  description     String? 
+  invoiceAmount   String?  
+}
