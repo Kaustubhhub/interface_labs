@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Project with Prisma
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your machine:
+
+- [Node.js](https://nodejs.org/) (preferably 20.10.0)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [PostgreSQL](https://www.postgresql.org/) or any other database supported by Prisma
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Kaustubhhub/interface_labs.git
+cd interface_labs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Clone the Repository
+```bash
+npm install
+# or
+yarn install
+```
+### 3. Configure the Database
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You have two options to set up your database:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. **Free Tier Database on Neon**: Rent a free-tier PostgreSQL database from [Neon](https://neon.tech/). After setting up your database on Neon, copy the connection string they provide.
 
-## Learn More
+2. **Local Setup**:
+   - **Using Docker**: Set up a PostgreSQL instance locally using Docker.
+     ```bash
+     docker run --name postgres -e POSTGRES_USER=your_user -e POSTGRES_PASSWORD=your_password -e POSTGRES_DB=your_db -p 5432:5432 -d postgres
+     ```
+   - **On Your Machine**: Alternatively, you can install PostgreSQL directly on your machine.
 
-To learn more about Next.js, take a look at the following resources:
+After setting up your database, create a `.env` file in the root of your project. Copy the environment variables from the `.env.example` file and update the `DATABASE_URL` with your PostgreSQL connection string.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. **Run the following Prisma commands to set up your database**:
+    ```bash
+      npx prisma migrate dev --name init
+      npx prisma generate
+     ```
+     
+### 4. Run the Development server
 
-## Deploy on Vercel
+  ```bash
+      npm run dev
+      # or
+      yarn dev
+```
+#### Database schema:
+```bash
+model Payment {
+  id          String   @unique @default(uuid())
+  date        String?  
+  type        String?  
+  orderId     String?  
+  description String?  
+  total       String? 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  // Index for faster lookups (optional, if you need to query by orderId)
+  @@index([orderId])
+}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+model Mtr {
+  id              String   @unique @default(uuid())
+  invoiceDate     String?  
+  transactionType String?  
+  shipmentDate    String?  
+  orderDate       String? 
+  shipmentItemId  String?  
+  description     String? 
+  invoiceAmount   String?  
+}
